@@ -9,13 +9,23 @@
   </head>
   <body>
     <div id="app">
-      <header>
-        <h1>Notas importantes</h1>
-        <p>Guarda tus recordatorios del día a día y consúltalos cuando los necesites.</p>
+      <header class="hero">
+        <div>
+          <span class="pill">Organiza tu día</span>
+          <h1>Notas importantes</h1>
+          <p>Guarda tus recordatorios del día a día y consúltalos cuando los necesites.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="blob"></div>
+          <div class="sparkle"></div>
+        </div>
       </header>
 
-      <section class="card">
-        <h2>Nueva nota</h2>
+      <section class="card" aria-labelledby="nueva-nota">
+        <div class="card-header">
+          <h2 id="nueva-nota">Nueva nota</h2>
+          <p>Completa la información esencial para no olvidar nada.</p>
+        </div>
         <form @submit.prevent="addNote">
           <div class="grid">
             <label>
@@ -35,12 +45,18 @@
             Etiquetas (separadas por coma)
             <input v-model.trim="form.tags" placeholder="finanzas, casa" />
           </label>
-          <button type="submit">Guardar nota</button>
+          <div class="form-actions">
+            <button type="submit">Guardar nota</button>
+            <span class="hint">Se guarda automáticamente en tu navegador.</span>
+          </div>
         </form>
       </section>
 
-      <section class="card">
-        <h2>Buscar y filtrar</h2>
+      <section class="card" aria-labelledby="buscar-filtrar">
+        <div class="card-header">
+          <h2 id="buscar-filtrar">Buscar y filtrar</h2>
+          <p>Encuentra tus notas por texto o etiqueta.</p>
+        </div>
         <div class="grid">
           <label>
             Buscar
@@ -57,8 +73,11 @@
         </div>
       </section>
 
-      <section class="card">
-        <h2>Notas activas</h2>
+      <section class="card" aria-labelledby="notas-activas">
+        <div class="card-header">
+          <h2 id="notas-activas">Notas activas</h2>
+          <p>Prioriza las tareas que aún están pendientes.</p>
+        </div>
         <div v-if="filteredNotes.length === 0" class="empty">No hay notas para mostrar.</div>
         <ul v-else class="notes">
           <li v-for="note in filteredNotes" :key="note.id">
@@ -80,8 +99,11 @@
         </ul>
       </section>
 
-      <section class="card">
-        <h2>Notas archivadas</h2>
+      <section class="card" aria-labelledby="notas-archivadas">
+        <div class="card-header">
+          <h2 id="notas-archivadas">Notas archivadas</h2>
+          <p>Historial de recordatorios completados.</p>
+        </div>
         <div v-if="archivedNotes.length === 0" class="empty">No hay notas archivadas.</div>
         <ul v-else class="notes archived">
           <li v-for="note in archivedNotes" :key="note.id">
