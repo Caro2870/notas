@@ -9,14 +9,14 @@ Sistema simple para guardar recordatorios y notas importantes en tu día a día.
 
 ## Interfaz web
 
-Puedes abrir `web/index.html` localmente o desplegar la carpeta `web/` en cualquier hosting estático como **GitHub Pages**.
+Puedes abrir `docs/index.html` localmente o desplegar la carpeta `docs/` en cualquier hosting estático como **GitHub Pages**.
 
 ### Despliegue en GitHub Pages
 
 1. Empuja este repositorio a GitHub.
 2. Ve a **Settings → Pages**.
 3. En **Build and deployment**, selecciona **Deploy from a branch**.
-4. Elige la rama principal (por ejemplo `main` o `work`) y la carpeta `/web` como fuente.
+4. Elige la rama principal (por ejemplo `main` o `master`) y la carpeta `/docs` como fuente.
 5. Guarda y espera a que GitHub genere la URL pública.
 
 La app usa rutas relativas (`app.js` y `styles.css`) por lo que funciona correctamente en GitHub Pages.
@@ -24,7 +24,7 @@ La app usa rutas relativas (`app.js` y `styles.css`) por lo que funciona correct
 ### Ejecutar en local
 
 ```bash
-cd web
+cd docs
 python3 -m http.server 8000
 ```
 
