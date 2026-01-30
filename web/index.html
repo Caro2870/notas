@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notas importantes</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>Notas importantes</h1>
+        <p>Guarda tus recordatorios del día a día y consúltalos cuando los necesites.</p>
+      </header>
+
+      <section class="card">
+        <h2>Nueva nota</h2>
+        <form @submit.prevent="addNote">
+          <div class="grid">
+            <label>
+              Título
+              <input v-model.trim="form.title" required placeholder="Ej. Pagar alquiler" />
+            </label>
+            <label>
+              Fecha límite
+              <input v-model="form.dueDate" type="date" />
+            </label>
+          </div>
+          <label>
+            Detalle
+            <textarea v-model.trim="form.content" rows="3" required placeholder="Ej. Programar transferencia"></textarea>
+          </label>
+          <label>
+            Etiquetas (separadas por coma)
+            <input v-model.trim="form.tags" placeholder="finanzas, casa" />
+          </label>
+          <button type="submit">Guardar nota</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Buscar y filtrar</h2>
+        <div class="grid">
+          <label>
+            Buscar
+            <input v-model.trim="filters.search" placeholder="Texto libre" />
+          </label>
+          <label>
+            Etiqueta
+            <input v-model.trim="filters.tag" placeholder="finanzas" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="secondary" @click="clearFilters">Limpiar filtros</button>
+          <span class="count">{{ filteredNotes.length }} notas activas</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Notas activas</h2>
+        <div v-if="filteredNotes.length === 0" class="empty">No hay notas para mostrar.</div>
+        <ul v-else class="notes">
+          <li v-for="note in filteredNotes" :key="note.id">
+            <div class="note-header">
+              <div>
+                <h3>{{ note.title }}</h3>
+                <p class="meta">
+                  {{ formatDate(note.createdAt) }}
+                  <span v-if="note.dueDate">· vence {{ note.dueDate }}</span>
+                </p>
+              </div>
+              <button class="secondary" @click="archiveNote(note.id)">Archivar</button>
+            </div>
+            <p>{{ note.content }}</p>
+            <div v-if="note.tags.length" class="tags">
+              <span v-for="tag in note.tags" :key="tag">#{{ tag }}</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Notas archivadas</h2>
+        <div v-if="archivedNotes.length === 0" class="empty">No hay notas archivadas.</div>
+        <ul v-else class="notes archived">
+          <li v-for="note in archivedNotes" :key="note.id">
+            <div>
+              <h3>{{ note.title }}</h3>
+              <p class="meta">Archivada · {{ formatDate(note.createdAt) }}</p>
+              <p>{{ note.content }}</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
