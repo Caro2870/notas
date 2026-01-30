@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notas importantes</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="hero">
+        <div>
+          <span class="pill">Organiza tu día</span>
+          <h1>Notas importantes</h1>
+          <p>Guarda tus recordatorios del día a día y consúltalos cuando los necesites.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="blob"></div>
+          <div class="sparkle"></div>
+        </div>
+      </header>
+
+      <section class="card" aria-labelledby="nueva-nota">
+        <div class="card-header">
+          <h2 id="nueva-nota">Nueva nota</h2>
+          <p>Completa la información esencial para no olvidar nada.</p>
+        </div>
+        <form @submit.prevent="addNote">
+          <div class="grid">
+            <label>
+              Título
+              <input v-model.trim="form.title" required placeholder="Ej. Pagar alquiler" />
+            </label>
+            <label>
+              Fecha límite
+              <input v-model="form.dueDate" type="date" />
+            </label>
+          </div>
+          <label>
+            Detalle
+            <textarea v-model.trim="form.content" rows="3" required placeholder="Ej. Programar transferencia"></textarea>
+          </label>
+          <label>
+            Etiquetas (separadas por coma)
+            <input v-model.trim="form.tags" placeholder="finanzas, casa" />
+          </label>
+          <div class="form-actions">
+            <button type="submit">Guardar nota</button>
+            <span class="hint">Se guarda automáticamente en tu navegador.</span>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="buscar-filtrar">
+        <div class="card-header">
+          <h2 id="buscar-filtrar">Buscar y filtrar</h2>
+          <p>Encuentra tus notas por texto o etiqueta.</p>
+        </div>
+        <div class="grid">
+          <label>
+            Buscar
+            <input v-model.trim="filters.search" placeholder="Texto libre" />
+          </label>
+          <label>
+            Etiqueta
+            <input v-model.trim="filters.tag" placeholder="finanzas" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="secondary" @click="clearFilters">Limpiar filtros</button>
+          <span class="count">{{ filteredNotes.length }} notas activas</span>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="notas-activas">
+        <div class="card-header">
+          <h2 id="notas-activas">Notas activas</h2>
+          <p>Prioriza las tareas que aún están pendientes.</p>
+        </div>
+        <div v-if="filteredNotes.length === 0" class="empty">No hay notas para mostrar.</div>
+        <ul v-else class="notes">
+          <li v-for="note in filteredNotes" :key="note.id">
+            <div class="note-header">
+              <div>
+                <h3>{{ note.title }}</h3>
+                <p class="meta">
+                  {{ formatDate(note.createdAt) }}
+                  <span v-if="note.dueDate">· vence {{ note.dueDate }}</span>
+                </p>
+              </div>
+              <button class="secondary" @click="archiveNote(note.id)">Archivar</button>
+            </div>
+            <p>{{ note.content }}</p>
+            <div v-if="note.tags.length" class="tags">
+              <span v-for="tag in note.tags" :key="tag">#{{ tag }}</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="notas-archivadas">
+        <div class="card-header">
+          <h2 id="notas-archivadas">Notas archivadas</h2>
+          <p>Historial de recordatorios completados.</p>
+        </div>
+        <div v-if="archivedNotes.length === 0" class="empty">No hay notas archivadas.</div>
+        <ul v-else class="notes archived">
+          <li v-for="note in archivedNotes" :key="note.id">
+            <div>
+              <h3>{{ note.title }}</h3>
+              <p class="meta">Archivada · {{ formatDate(note.createdAt) }}</p>
+              <p>{{ note.content }}</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
